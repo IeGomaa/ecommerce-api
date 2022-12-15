@@ -10,9 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class AuthApiController extends Controller
+class AdminAuthController extends Controller
 {
-
     use ApiResponseTrait;
     public function login(Request $request)
     {
@@ -36,7 +35,7 @@ class AuthApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string',
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email|unique:users,email',
             'password' => 'required|string'
         ]);
 
