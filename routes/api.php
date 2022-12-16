@@ -5,7 +5,12 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\Admin\AdminClientController;
 use App\Http\Controllers\Admin\AdminOrderController;
 use App\Http\Controllers\Admin\AdminProductController;
+use App\Http\Controllers\EndUser\AuthController;
+use App\Http\Controllers\EndUser\CartController;
+use App\Http\Controllers\EndUser\CategoryController;
 use App\Http\Controllers\EndUser\ClientController;
+use App\Http\Controllers\EndUser\OrderController;
+use App\Http\Controllers\EndUser\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,7 +29,7 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::group(['prefix' => '/'], function () {
-    Route::controller(ClientController::class)->group(function () {
+    Route::controller(AuthController::class)->group(function () {
         Route::post('login','login');
         Route::post('register','register');
     });
@@ -33,6 +38,47 @@ Route::group(['prefix' => '/'], function () {
 /**
  * EndUse Cycle
  */
+
+Route::group(['prefix' => 'souq', 'middleware' => 'client.auth'], function () {
+
+    Route::controller(ClientController::class)->group(function () {
+        Route::get('index','index');
+        Route::get('delete','delete');
+        Route::post('update','update');
+    });
+
+    Route::group(['prefix' => 'cart'], function () {
+        Route::controller(CartController::class)->group(function () {
+            Route::get('/','clientCart');
+            Route::post('create','addToCart');
+            Route::post('delete','deleteFromCart');
+            Route::get('delete','deleteCart');
+            Route::post('update','updateCount');
+        });
+    });
+
+    Route::group(['prefix' => 'category'], function () {
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('/','index');
+        });
+    });
+
+    Route::group(['prefix' => 'product'], function () {
+        Route::controller(ProductController::class)->group(function () {
+            Route::get('/','index');
+        });
+    });
+
+    Route::group(['prefix' => 'order'], function () {
+        Route::controller(OrderController::class)->group(function () {
+            Route::get('/','index');
+            Route::get('create','create');
+        });
+    });
+
+
+});
+
 
 
 /**

@@ -3,71 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Traits\Api\ApiResponseTrait;
-use App\Http\Traits\CategoryTrait;
-use App\Models\Category;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Interfaces\Admin\AdminCategoryInterface;
 
 class AdminCategoryController extends Controller
 {
-    use CategoryTrait,ApiResponseTrait;
-    private $categoryModel;
-    public function __construct(Category $category)
+    private $categoryInterface;
+    public function __construct(AdminCategoryInterface $interface)
     {
-        $this->categoryModel = $category;
+        $this->categoryInterface = $interface;
     }
 
     public function index()
     {
-        return $this->apiResponse(200, 'Category Data', null, $this->categories());
+        return $this->categoryInterface->index();
     }
 
-    public function create(Request $request)
+    public function create($request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|unique:categories,name'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->apiResponse(422, 'Validation Error', $validator->errors());
-        }
-
-        $category = $this->categoryModel::create([
-            'name' => $request->name
-        ]);
-        return $this->apiResponse(200, 'Category Was Created', null, $category);
+        return $this->categoryInterface->create($request);
     }
 
-    public function delete(Request $request)
+    public function delete($request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:categories,id'
-        ]);
-
-        if ($validator->fails()) {
-            return $this->apiResponse(422, 'Validation Error', $validator->errors());
-        }
-
-        $this->categoryItem($request->id)->delete();
-        return $this->apiResponse(200, 'Category Was Deleted');
+        return $this->categoryInterface->delete($request);
     }
 
-    public function update(Request $request)
+    public function update($request)
     {
-        $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:categories,id',
-            'name' => 'required|unique:categories,name,' . $request->id
-        ]);
-
-        if ($validator->fails()) {
-            return $this->apiResponse(422, 'Validation Error', $validator->errors());
-        }
-
-        $this->categoryItem($request->id)->update([
-            'name' => $request->name
-        ]);
-        return $this->apiResponse(200, 'Category Was Update');
+        return $this->categoryInterface->update($request);
     }
-
 }

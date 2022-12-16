@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Rules\EndUser\Cart;
+namespace App\Rules\EndUser\Order;
 
 use App\Models\Cart;
-use App\Models\Product;
 use Illuminate\Contracts\Validation\Rule;
 
-class StockValidation implements Rule
+class CartCountValidation implements Rule
 {
     /**
      * Create a new rule instance.
@@ -27,16 +26,8 @@ class StockValidation implements Rule
      */
     public function passes($attribute, $value)
     {
-        $product = Product::where([ ['id',request('product_id')], ['stock', '>=', $value] ])->first();
-        if ($product) {
-            $cart = Cart::where([ ['client_id',auth('client_api')->user()->id], ['product_id',$product->id] ])->first();
-
-            if ($cart) {
-                if (($cart->count + $value) <= $product->stock) {
-                    return true;
-                }
-                return false;
-            }
+        $cartItems = Cart::where('client_id', auth('client_api')->user()->id)->with('product')->get();
+        if (count($cartItems) != 0) {
             return true;
         }
         return false;
@@ -49,6 +40,6 @@ class StockValidation implements Rule
      */
     public function message()
     {
-        return 'Sorry The Count Of Product You Want Not Available';
+        return 'Cart Was Empty Sr.';
     }
 }
