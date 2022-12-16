@@ -41,6 +41,12 @@ Route::group(['prefix' => '/'], function () {
 
 Route::group(['prefix' => 'souq', 'middleware' => 'client.auth'], function () {
 
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('logout','logout');
+        Route::post('refresh','refresh');
+        Route::get('user-profile','userAccount');
+    });
+
     Route::controller(ClientController::class)->group(function () {
         Route::get('index','index');
         Route::get('delete','delete');
@@ -88,6 +94,7 @@ Route::group(['prefix' => 'souq', 'middleware' => 'client.auth'], function () {
 Route::group(['prefix' => 'auth'], function () {
     Route::controller(AdminAuthController::class)->group(function () {
         Route::post('login','login');
+        Route::post('register','register');
     });
 });
 
@@ -95,35 +102,44 @@ Route::group(['prefix' => 'auth'], function () {
  * Admin Cycle
  */
 
-Route::group(['prefix' => 'category', 'middleware' => 'jwt.verify'], function () {
-    Route::controller(AdminCategoryController::class)->group(function () {
-        Route::get('/','index');
-        Route::post('create','create');
-        Route::post('delete','delete');
-        Route::post('update','update');
-    });
-});
+Route::group(['prefix' => 'admin'], function () {
 
-Route::group(['prefix' => 'product', 'middleware' => 'jwt.verify'], function () {
-    Route::controller(AdminProductController::class)->group(function () {
-        Route::get('/','index');
-        Route::post('create','create');
-        Route::post('delete','delete');
-        Route::post('update','update');
+    Route::controller(AdminAuthController::class)->group(function () {
+        Route::post('logout','logout');
+        Route::post('refresh','refresh');
+        Route::get('user-profile','userAccount');
     });
-});
 
-Route::group(['prefix' => 'client', 'middleware' => 'jwt.verify'], function () {
-    Route::controller(AdminClientController::class)->group(function () {
-        Route::get('/','index');
-        Route::post('delete','delete');
+    Route::group(['prefix' => 'category', 'middleware' => 'jwt.verify'], function () {
+        Route::controller(AdminCategoryController::class)->group(function () {
+            Route::get('/','index');
+            Route::post('create','create');
+            Route::post('delete','delete');
+            Route::post('update','update');
+        });
     });
-});
 
-Route::group(['prefix' => 'order', 'middleware' => 'jwt.verify'], function () {
-    Route::controller(AdminOrderController::class)->group(function () {
-        Route::get('/','index');
-        Route::post('delete','delete');
+    Route::group(['prefix' => 'product', 'middleware' => 'jwt.verify'], function () {
+        Route::controller(AdminProductController::class)->group(function () {
+            Route::get('/','index');
+            Route::post('create','create');
+            Route::post('delete','delete');
+            Route::post('update','update');
+        });
     });
-});
 
+    Route::group(['prefix' => 'client', 'middleware' => 'jwt.verify'], function () {
+        Route::controller(AdminClientController::class)->group(function () {
+            Route::get('/','index');
+            Route::post('delete','delete');
+        });
+    });
+
+    Route::group(['prefix' => 'order', 'middleware' => 'jwt.verify'], function () {
+        Route::controller(AdminOrderController::class)->group(function () {
+            Route::get('/','index');
+            Route::post('delete','delete');
+        });
+    });
+
+});

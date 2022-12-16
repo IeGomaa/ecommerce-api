@@ -4,6 +4,7 @@ namespace App\Http\Repositories\EndUser;
 
 use App\Http\Interfaces\EndUser\AuthInterface;
 use App\Http\Traits\Api\ApiResponseTrait;
+use App\Http\Traits\ClientTrait;
 use App\Models\Client;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,7 +12,14 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthRepository implements AuthInterface
 {
-    use ApiResponseTrait;
+    private $clientModel;
+    use ApiResponseTrait, ClientTrait;
+
+    public function __construct(Client $client)
+    {
+        $this->clientModel = $client;
+    }
+
     public function login($request)
     {
         $validator = Validator::make($request->all(), [
@@ -42,7 +50,7 @@ class AuthRepository implements AuthInterface
             return $this->apiResponse(422, 'Validation Error', $validator->errors());
         }
 
-        $client = Client::create([
+        $client = $this->clientModel::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password)
@@ -58,7 +66,7 @@ class AuthRepository implements AuthInterface
 
     public function userAccount()
     {
-        $user = Client::where('id', Auth::guard('client_api')->user()->id)->first();
+        $user = $this->clientModel::where('id', Auth::guard('client_api')->user()->id)->first();
         return $this->apiResponse(200, 'Client Account', null, $user);
     }
 
