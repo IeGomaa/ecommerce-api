@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EndUser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\EndUser\CartInterface;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -18,12 +19,12 @@ class CartController extends Controller
         return $this->cartInterface->clientCart();
     }
 
-    public function addToCart($request)
+    public function addToCart(Request $request)
     {
         return $this->cartInterface->addToCart($request);
     }
 
-    public function deleteFromCart($request)
+    public function deleteFromCart(Request $request)
     {
         return $this->cartInterface->deleteFromCart($request);
     }
@@ -33,7 +34,7 @@ class CartController extends Controller
         return $this->cartInterface->deleteCart();
     }
 
-    public function updateCount($request)
+    public function updateCount(Request $request)
     {
         return $this->cartInterface->updateCount($request);
     }

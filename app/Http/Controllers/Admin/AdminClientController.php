@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\Admin\AdminClientInterface;
+use Illuminate\Http\Request;
 
 class AdminClientController extends Controller
 {
@@ -18,7 +19,7 @@ class AdminClientController extends Controller
         return $this->clientInterface->index();
     }
 
-    public function delete($request)
+    public function delete(Request $request)
     {
         return $this->clientInterface->delete($request);
     }

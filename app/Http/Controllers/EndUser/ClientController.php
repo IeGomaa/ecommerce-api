@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EndUser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\EndUser\ClientInterface;
+use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -23,7 +24,7 @@ class ClientController extends Controller
         return $this->clientInterface->delete();
     }
 
-    public function update($request)
+    public function update(Request $request)
     {
         return $this->clientInterface->update($request);
     }

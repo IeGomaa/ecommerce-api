@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\Admin\AdminOrderInterface;
+use Illuminate\Http\Request;
 
 class AdminOrderController extends Controller
 {
@@ -18,7 +19,7 @@ class AdminOrderController extends Controller
         return $this->orderInterface->index();
     }
 
-    public function delete($request)
+    public function delete(Request $request)
     {
         return $this->orderInterface->delete($request);
     }

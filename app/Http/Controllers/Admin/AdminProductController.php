@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\Admin\AdminProductInterface;
+use Illuminate\Http\Request;
 
 class AdminProductController extends Controller
 {
@@ -18,17 +19,17 @@ class AdminProductController extends Controller
         return $this->productInterface->index();
     }
 
-    public function create($request)
+    public function create(Request $request)
     {
         return $this->productInterface->create($request);
     }
 
-    public function delete($request)
+    public function delete(Request $request)
     {
         return $this->productInterface->delete($request);
     }
 
-    public function update($request)
+    public function update(Request $request)
     {
         return $this->productInterface->update($request);
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\EndUser;
 
 use App\Http\Controllers\Controller;
 use App\Http\Interfaces\EndUser\AuthInterface;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -13,12 +14,12 @@ class AuthController extends Controller
         $this->authController = $interface;
     }
 
-    public function login($request)
+    public function login(Request $request)
     {
         return $this->authController->login($request);
     }
 
-    public function register($request)
+    public function register(Request $request)
     {
         return $this->authController->register($request);
     }
