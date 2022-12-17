@@ -123,6 +123,8 @@ Route::group(['prefix' => 'admin'], function () {
         Route::controller(AdminProductController::class)->group(function () {
             Route::get('/','index');
             Route::post('create','create');
+            Route::post('import','import');
+            Route::get('export','exportDummyData');
             Route::post('delete','delete');
             Route::post('update','update');
         });

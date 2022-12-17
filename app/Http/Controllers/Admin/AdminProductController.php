@@ -24,6 +24,16 @@ class AdminProductController extends Controller
         return $this->productInterface->create($request);
     }
 
+    public function import(Request $request)
+    {
+        return $this->productInterface->import($request);
+    }
+
+    public function exportDummyData()
+    {
+        return $this->productInterface->exportDummyData();
+    }
+
     public function delete(Request $request)
     {
         return $this->productInterface->delete($request);

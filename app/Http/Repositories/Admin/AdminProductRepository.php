@@ -2,11 +2,14 @@
 
 namespace App\Http\Repositories\Admin;
 
+use App\Exports\ProductsExport;
 use App\Http\Interfaces\Admin\AdminProductInterface;
 use App\Http\Traits\Api\ApiResponseTrait;
 use App\Http\Traits\ProductTrait;
+use App\Imports\ProductImport;
 use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminProductRepository implements AdminProductInterface
 {
@@ -42,6 +45,25 @@ class AdminProductRepository implements AdminProductInterface
             'category_id' => $request->category_id
         ]);
         return $this->apiResponse(200, 'Product Was Created', null, $product);
+    }
+
+    public function import($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'excel' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->apiResponse(422, 'Validation Error', $validator->errors());
+        }
+
+        Excel::import(new ProductImport, $request->excel);
+        return $this->apiResponse(200, 'Products Was Created');
+    }
+
+    public function exportDummyData()
+    {
+        return Excel::download(new ProductsExport, 'test.xlsx');
     }
 
     public function delete($request)
