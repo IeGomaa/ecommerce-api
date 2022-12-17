@@ -102,7 +102,7 @@ Route::group(['prefix' => 'auth'], function () {
  * Admin Cycle
  */
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' => 'jwt.verify'], function () {
 
     Route::controller(AdminAuthController::class)->group(function () {
         Route::post('logout','logout');
@@ -110,7 +110,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('user-profile','userAccount');
     });
 
-    Route::group(['prefix' => 'category', 'middleware' => 'jwt.verify'], function () {
+    Route::group(['prefix' => 'category'], function () {
         Route::controller(AdminCategoryController::class)->group(function () {
             Route::get('/','index');
             Route::post('create','create');
@@ -119,7 +119,7 @@ Route::group(['prefix' => 'admin'], function () {
         });
     });
 
-    Route::group(['prefix' => 'product', 'middleware' => 'jwt.verify'], function () {
+    Route::group(['prefix' => 'product'], function () {
         Route::controller(AdminProductController::class)->group(function () {
             Route::get('/','index');
             Route::post('create','create');
@@ -130,14 +130,14 @@ Route::group(['prefix' => 'admin'], function () {
         });
     });
 
-    Route::group(['prefix' => 'client', 'middleware' => 'jwt.verify'], function () {
+    Route::group(['prefix' => 'client'], function () {
         Route::controller(AdminClientController::class)->group(function () {
             Route::get('/','index');
             Route::post('delete','delete');
         });
     });
 
-    Route::group(['prefix' => 'order', 'middleware' => 'jwt.verify'], function () {
+    Route::group(['prefix' => 'order'], function () {
         Route::controller(AdminOrderController::class)->group(function () {
             Route::get('/','index');
             Route::post('delete','delete');
